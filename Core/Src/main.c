@@ -23,7 +23,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "button.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -44,12 +44,15 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+Button_t NucleoButton;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
+void TurnOnLed_f(void);
+void TurnOffLed_f(void);
+void ToggleLed_f(void);
 
 /* USER CODE END PFP */
 
@@ -75,6 +78,13 @@ int main(void)
 
   /* USER CODE BEGIN Init */
 
+  //void ButtonInit (Button_t* Button, GPIO_TypeDef* GPIO_Port,uint16_t GPIO_Pin,
+  //				 uint32_t TimerDebounce, uint32_t TimerLongPress, uint32_t TimerRepeat);
+  ButtonInit(&NucleoButton,NUCLEO_BUTTON_GPIO_Port,NUCLEO_BUTTON_Pin, 25,1500,500);
+  ButtonRegisterPressedCallback(&NucleoButton, TurnOnLed_f);
+  ButtonRegisterLongPressCallback(&NucleoButton, TurnOffLed_f);
+  ButtonRegisterRepeatCallback(&NucleoButton, ToggleLed_f);
+
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -95,8 +105,8 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  ButtonTask(&NucleoButton); // Machine state task for button
 
-	 // HAL_GPIO_ReadPin(GPIOx, GPIO_Pin)
 
 
     /* USER CODE END WHILE */
@@ -153,6 +163,20 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+
+void TurnOnLed_f(void)
+{
+	HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
+}
+
+void TurnOffLed_f(void)
+{
+	HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
+}
+void ToggleLed_f(void)
+{
+	HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+}
 
 /* USER CODE END 4 */
 
