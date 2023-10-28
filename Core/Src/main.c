@@ -50,6 +50,7 @@ Button_t NucleoButton;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
+void IdleTurnOffLed_f(void);
 void TurnOnLed_f(void);
 void TurnOffLed_f(void);
 void ToggleLed_f(void);
@@ -84,6 +85,7 @@ int main(void)
   ButtonRegisterPressedCallback(&NucleoButton, TurnOnLed_f);
   ButtonRegisterLongPressCallback(&NucleoButton, TurnOffLed_f);
   ButtonRegisterRepeatCallback(&NucleoButton, ToggleLed_f);
+  ButtonRegisterIdleCallback(&NucleoButton,IdleTurnOffLed_f);
 
   /* USER CODE END Init */
 
@@ -163,6 +165,11 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+
+void IdleTurnOffLed_f(void)
+{
+	HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
+}
 
 void TurnOnLed_f(void)
 {
