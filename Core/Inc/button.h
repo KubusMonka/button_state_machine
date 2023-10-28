@@ -29,6 +29,7 @@ typedef struct
 	uint32_t		TimerLongPress; //settable time for long press timer
 	uint32_t		TimerRepeat; //settable time for repeat timer
 
+	void(*ButtonIdle)(void);
 	void(*ButtonPressed)(void);
 	void(*ButtonLongPressed)(void); //callback
 	void(*ButtonRepeat)(void);
@@ -43,6 +44,7 @@ void ButtonInit (Button_t* Button, GPIO_TypeDef* GPIO_Port,uint16_t GPIO_Pin,
 
 void ButtonTask(Button_t* Button);
 
+void ButtonRegisterIdleCallback(Button_t* Button, void (*Callback)(void));
 void ButtonRegisterPressedCallback(Button_t* Button, void (*Callback)(void));
 void ButtonRegisterLongPressCallback(Button_t* Button, void (*Callback)(void));
 void ButtonRegisterRepeatCallback(Button_t* Button, void (*Callback)(void));

@@ -33,6 +33,14 @@ void ButtonIdleRoutine (Button_t* Button)
 		Button->LastTick= HAL_GetTick(); // Remember current tick for Debounce software timer
 		Button->State = DEBOUNCE;        // jump to debounce state (switch)
 	}
+	else
+	{
+		if (Button->ButtonIdle != NULL)
+		{
+			Button->ButtonIdle();
+
+		}
+	}
 }
 
 void ButtonDebounceRoutine (Button_t* Button)
@@ -152,6 +160,12 @@ void SetButtonTimerRepeat (Button_t* Button, uint32_t TimerRepeat)
 
 
 // Register callbacks
+
+void ButtonRegisterIdleCallback(Button_t* Button, void (*Callback)(void))
+{
+	Button->ButtonIdle = Callback; // Set new callback for button press
+}
+
 void ButtonRegisterPressedCallback(Button_t* Button, void (*Callback)(void))
 {
 	Button->ButtonPressed = Callback; // Set new callback for button press
